@@ -1,0 +1,433 @@
+:root {
+    --primary-color: #333;
+    --accent-color: #e32636; /* Using a red similar to XiaoHongShu/Pinterest branding hints or general bold color */
+    --text-color: #444;
+    --bg-color: #f9f9f9;
+    --card-bg: #ffffff;
+    --placeholder-color: #888;
+    --placeholder-bg: #f0f0f0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    overflow: hidden; /* We will control scrolling */
+}
+
+a {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 220px;
+    height: 100vh;
+    background-color: #fff;
+    border-right: 1px solid #eee;
+    z-index: 200;
+    padding: 20px 0;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.02);
+    overflow-y: auto;
+}
+
+.sidebar-header {
+    padding: 0 20px 15px 20px;
+    border-bottom: 1px solid #f0f0f0;
+    margin-bottom: 10px;
+}
+
+.sidebar-header h3 {
+    color: var(--primary-color);
+    font-size: 1.2em;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar li {
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.9em;
+    color: #666;
+    border-left: 3px solid transparent;
+}
+
+.sidebar li:hover {
+    background-color: #fafafa;
+    color: var(--primary-color);
+}
+
+.sidebar li.active {
+    background-color: #fff5f5;
+    color: var(--accent-color);
+    border-left-color: var(--accent-color);
+    font-weight: 600;
+}
+
+/* Container */
+.presentation-container {
+    margin-left: 220px;
+    width: calc(100% - 220px);
+    height: 100vh;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+    position: relative;
+}
+
+/* Navigation Buttons */
+.nav-controls {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.nav-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background-color: rgba(0,0,0,0.5);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+}
+
+.nav-btn:hover {
+    background-color: var(--accent-color);
+}
+
+/* Slides */
+.slide {
+    height: 100vh;
+    width: 100%;
+    scroll-snap-align: start;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    opacity: 0.5;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.slide.active { /* JS can toggle this for effects, but scroll snap handles position */
+    opacity: 1;
+}
+
+/* Focus effect when in view (using IntersectionObserver in JS later for class toggle) */
+.slide.in-view {
+    opacity: 1;
+}
+
+.content-wrapper {
+    background: var(--card-bg);
+    width: 100%;
+    max-width: 1000px;
+    max-height: 90vh;
+    padding: 40px 60px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    overflow-y: auto; /* Allow internal scrolling if content is too long */
+}
+
+/* Slide Specific Styles */
+
+/* Header Slide */
+#slide-intro h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    color: var(--primary-color);
+}
+
+#slide-intro h2 {
+    font-size: 1.5em;
+    color: var(--text-color);
+    margin-bottom: 20px;
+    border-bottom: none; /* Removed underline */
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+.basic-info p {
+    margin-bottom: 8px;
+    font-size: 1.1em;
+}
+
+.basic-info i {
+    width: 20px;
+    text-align: center;
+    margin-right: 5px;
+    color: var(--accent-color);
+}
+
+/* Section Headers */
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 5px; /* Reduced from 20px */
+    border-bottom: none;
+    padding-bottom: 5px; /* Reduced from 10px */
+}
+
+.section-header h3 {
+    font-size: 1.8em;
+    color: var(--primary-color);
+    border-bottom: none !important;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.company-tag {
+    background-color: var(--accent-color);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+/* Project Headers */
+.project-header {
+    margin-bottom: 20px;
+}
+
+.project-header h3 {
+    font-size: 1.6em;
+    margin-bottom: 5px;
+}
+
+.role-badge {
+    background-color: #eef;
+    color: #44a;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    margin-right: 10px;
+}
+
+.role-tag {
+    background-color: #eee;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 0.8em;
+    margin-left: 5px;
+}
+
+.date {
+    color: #666;
+    font-weight: 500;
+    float: right;
+}
+
+/* Details */
+.detail-block {
+    margin-bottom: 20px;
+}
+
+.detail-block h5 {
+    font-size: 1.1em;
+    margin-bottom: 8px;
+    color: var(--primary-color);
+    border-left: 3px solid var(--accent-color);
+    padding-left: 10px;
+}
+
+.detail-block p {
+    margin-bottom: 10px;
+    text-align: justify;
+}
+
+.detail-block ul {
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+.detail-block li {
+    margin-bottom: 5px;
+}
+
+/* Skills List */
+.skills-list li {
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+/* Internships */
+.internship-item {
+    margin-bottom: 25px;
+}
+
+.internship-item.compact {
+    margin-bottom: 15px;
+}
+
+.internship-header h4 {
+    font-size: 1.2em;
+    margin-bottom: 5px;
+}
+
+.compact .internship-header h4 {
+    font-size: 1.1em;
+    margin-bottom: 2px;
+}
+
+.compact p {
+    font-size: 0.95em;
+    margin-bottom: 0;
+}
+
+.sub-text {
+    font-weight: normal;
+    font-size: 0.9em;
+    color: #666;
+    margin-left: 5px;
+}
+
+.compact-list li {
+    margin-bottom: 8px;
+    font-size: 0.95em;
+    line-height: 1.5;
+}
+
+/* Education & Split Layout */
+.split-layout {
+    display: flex;
+    gap: 40px;
+}
+
+.left-panel, .right-panel {
+    flex: 1;
+}
+
+.left-panel h3, .right-panel h3 {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+    margin-bottom: 10px; /* Reduced from 15px */
+    margin-top: 0; /* Ensure no top margin */
+}
+
+.project-list li {
+    margin-bottom: 12px; /* Increased from 6px */
+    font-size: 1.1em; /* Match left panel font size */
+}
+
+.edu-item {
+    margin-bottom: 20px;
+}
+
+.edu-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+/* Edit Placeholder */
+.edit-placeholder {
+    margin-top: 30px;
+    border: 2px dashed #ddd;
+    background-color: var(--placeholder-bg);
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    color: var(--placeholder-color);
+    transition: all 0.3s;
+}
+
+.edit-placeholder:hover {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+    cursor: text;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 50px;
+        overflow: hidden;
+    }
+    
+    .sidebar:hover {
+        width: 220px;
+        box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+    }
+    
+    .sidebar-header {
+        display: none; /* Hide header in collapsed mode */
+    }
+    
+    .sidebar:hover .sidebar-header {
+        display: block;
+    }
+
+    .sidebar li {
+        white-space: nowrap;
+        padding: 15px 10px;
+        text-align: center;
+        font-size: 0.8em;
+    }
+
+    .sidebar:hover li {
+        text-align: left;
+        padding: 10px 20px;
+        font-size: 0.9em;
+    }
+
+    .presentation-container {
+        margin-left: 50px;
+        width: calc(100% - 50px);
+    }
+}
+
+@media (max-width: 768px) {
+    .content-wrapper {
+        padding: 20px;
+        max-height: 95vh;
+    }
+    
+    .slide {
+        padding: 10px;
+    }
+
+    .split-layout {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .date {
+        float: none;
+        display: block;
+        margin-top: 5px;
+    }
+    
+    #slide-intro h1 {
+        font-size: 2em;
+    }
+}
