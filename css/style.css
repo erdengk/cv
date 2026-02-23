@@ -143,6 +143,32 @@ a:hover {
     background-color: var(--accent-color);
 }
 
+/* Page Indicator */
+.page-indicator {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 1000;
+    font-weight: 500;
+    pointer-events: none;
+    backdrop-filter: blur(4px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    letter-spacing: 1px;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Hide indicator when not needed (e.g., initial load before JS runs) */
+.page-indicator:empty {
+    opacity: 0;
+}
+
 /* Slides */
 .slide {
     height: 100vh;

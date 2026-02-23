@@ -3,8 +3,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const slides = document.querySelectorAll('.slide');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
+    const pageIndicator = document.getElementById('page-indicator');
     
-    // New Navigation Elements
+    // Initial Page Indicator Setup
+    if (pageIndicator && slides.length > 0) {
+        pageIndicator.textContent = `1 / ${slides.length}`;
+        pageIndicator.style.opacity = 1;
+    }
+
     const navItems = document.querySelectorAll('.nav-menu li');
 
     // Navigation Buttons Logic
@@ -70,6 +76,13 @@ document.addEventListener('DOMContentLoaded', () => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('in-view');
                 entry.target.classList.add('active');
+                
+                // Update Page Indicator
+                if (pageIndicator) {
+                    const index = Array.from(slides).indexOf(entry.target);
+                    pageIndicator.textContent = `${index + 1} / ${slides.length}`;
+                    pageIndicator.style.opacity = 1;
+                }
                 
                 // Update nav active state
                 const id = entry.target.id;
