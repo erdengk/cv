@@ -3,6 +3,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const slides = document.querySelectorAll('.slide');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
+    
+    // New Navigation Elements
+    const navItems = document.querySelectorAll('.nav-menu li');
 
     // Navigation Buttons Logic
     prevBtn.addEventListener('click', () => {
@@ -21,13 +24,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    const sidebarItems = document.querySelectorAll('.sidebar li');
-
-    // Sidebar Click Logic
-    sidebarItems.forEach(item => {
+    // Nav Item Click Logic
+    navItems.forEach(item => {
         item.addEventListener('click', () => {
             const targetId = item.getAttribute('data-target');
             const targetSlide = document.getElementById(targetId);
+            
             if (targetSlide) {
                 targetSlide.scrollIntoView({ behavior: 'smooth' });
             }
@@ -42,7 +44,12 @@ document.addEventListener('DOMContentLoaded', () => {
         slides.forEach(slide => {
             const rect = slide.getBoundingClientRect();
             // Calculate visible height of the slide
-            const visibleHeight = Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0);
+            // We need to account for the top nav height (60px)
+            const topNavHeight = 60;
+            const visibleTop = Math.max(rect.top, topNavHeight);
+            const visibleBottom = Math.min(rect.bottom, window.innerHeight);
+            
+            const visibleHeight = Math.max(0, visibleBottom - visibleTop);
             
             if (visibleHeight > maxVisibleHeight) {
                 maxVisibleHeight = visibleHeight;
@@ -64,20 +71,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 entry.target.classList.add('in-view');
                 entry.target.classList.add('active');
                 
-                // Update sidebar active state
+                // Update nav active state
                 const id = entry.target.id;
-                sidebarItems.forEach(item => {
+                navItems.forEach(item => {
                     if (item.getAttribute('data-target') === id) {
                         item.classList.add('active');
-                        // Ensure sidebar scroll follows selection
-                        item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                     } else {
                         item.classList.remove('active');
                     }
                 });
             } else {
                 entry.target.classList.remove('active');
-                // Optional: keep 'in-view' if you want them to stay visible once seen
             }
         });
     }, observerOptions);
